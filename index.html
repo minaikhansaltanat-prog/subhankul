@@ -216,6 +216,10 @@
   .portfolio-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
   @media (max-width:960px){ .portfolio-grid{ grid-template-columns:repeat(2,1fr); } }
   @media (max-width:640px){ .portfolio-grid{ grid-template-columns:1fr; } }
+  .pf-more-wrap{ display:flex; justify-content:center; margin-top:34px; }
+  .pf-viewall{ display:inline-flex; align-items:center; gap:8px; }
+  .pf-viewall svg{ width:16px; height:16px; transition:transform .3s var(--ease-spring); }
+  .pf-viewall:hover svg{ transform:translateY(2px); }
   .pf-card{
     border:1px solid var(--line); border-radius:var(--radius-md); overflow:hidden; text-decoration:none; color:var(--text);
     background:var(--bg-panel); box-shadow:var(--shadow-sm); display:flex; flex-direction:column;
@@ -499,6 +503,7 @@
         <button class="filter-chip" data-filter="ai" data-i18n="pf.filter.ai">AI</button>
       </div>
       <div class="portfolio-grid" id="portfolioGrid"></div>
+      <div class="pf-more-wrap" id="portfolioMore"></div>
     </div>
   </section>
 
@@ -688,7 +693,7 @@ const I18N = {
     'services.title':'Қызметтер','services.lead':'Бір беттік сайттан бастап толық AI-автоматтандыруға дейін — әр қызметтің бағасы мен мерзімі алдын ала белгілі.',
     'pf.title':'Портфолио','pf.lead':'35+ жұмыс істейтін жоба — сайттар, платформалар және AI-шешімдер. Әр карточка тірі сайтқа апарады.',
     'pf.filter.all':'Барлығы','pf.filter.site':'Сайт','pf.filter.app':'Қосымша','pf.filter.ai':'AI',
-    'pf.visit':'Сайтты көру',
+    'pf.visit':'Сайтты көру','pf.viewall':'Барлық жобаны қарау',
     'process.title':'Жұмыс процесі','process.lead':'Брифингтен тапсыруға дейін бес нақты қадам, әр қадамның мерзімі белгілі.',
     'why.title':'Неге BAYOU','why.lead':'Жылдамдық, ашық баға және AI-тәжірибе — бір командада.',
     'pricing.title':'Қызмет пен баға кестесі','pricing.lead':'Барлық баға ₸ түрінде, соңғы баға жоба көлеміне қарай нақтыланады.',
@@ -717,7 +722,7 @@ const I18N = {
     'services.title':'Услуги','services.lead':'От одностраничного сайта до полной AI-автоматизации — цена и срок каждой услуги известны заранее.',
     'pf.title':'Портфолио','pf.lead':'35+ работающих проектов — сайты, платформы и AI-решения. Каждая карточка ведёт на живой сайт.',
     'pf.filter.all':'Все','pf.filter.site':'Сайты','pf.filter.app':'Приложения','pf.filter.ai':'AI',
-    'pf.visit':'Смотреть сайт',
+    'pf.visit':'Смотреть сайт','pf.viewall':'Смотреть все проекты',
     'process.title':'Процесс работы','process.lead':'От брифинга до сдачи проекта — пять понятных шагов, срок каждого известен заранее.',
     'why.title':'Почему BAYOU','why.lead':'Скорость, прозрачные цены и опыт с AI — в одной команде.',
     'pricing.title':'Таблица услуг и цен','pricing.lead':'Все цены в ₸, итоговая стоимость уточняется по объёму проекта.',
@@ -899,9 +904,19 @@ function slugify(url){
   return url.replace(/^https?:\/\//,'').replace(/[^a-z0-9]+/gi,'-').replace(/^-+|-+$/g,'').toLowerCase().slice(0,60);
 }
 let currentFilter = 'all';
+let portfolioExpanded = false;
+function getInitialPortfolioCount(){
+  const w = window.innerWidth;
+  if(w <= 640) return 7;
+  if(w <= 960) return 10;
+  return 15;
+}
 function renderPortfolio(filter){
   currentFilter = filter;
-  const items = filter==='all' ? PORTFOLIO : PORTFOLIO.filter(p=>p.cat===filter);
+  const allItems = filter==='all' ? PORTFOLIO : PORTFOLIO.filter(p=>p.cat===filter);
+  const initialCount = getInitialPortfolioCount();
+  const showAll = portfolioExpanded || allItems.length <= initialCount;
+  const items = showAll ? allItems : allItems.slice(0, initialCount);
   const tagClass = { site:'tag-site', app:'tag-app', ai:'tag-ai' };
   const tagLabel = { site:I18N[lang]['pf.filter.site'], app:I18N[lang]['pf.filter.app'], ai:I18N[lang]['pf.filter.ai'] };
   document.getElementById('portfolioGrid').innerHTML = items.map(item=>{
@@ -923,12 +938,34 @@ function renderPortfolio(filter){
       </div>
     </a>`;
   }).join('');
+
+  const moreWrap = document.getElementById('portfolioMore');
+  if(!showAll){
+    const rest = allItems.length - initialCount;
+    moreWrap.innerHTML = `
+      <button class="btn btn-ghost pf-viewall" id="pfViewAllBtn">
+        ${I18N[lang]['pf.viewall']} (+${rest})
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+      </button>`;
+    document.getElementById('pfViewAllBtn').addEventListener('click', ()=>{
+      portfolioExpanded = true;
+      renderPortfolio(currentFilter);
+    });
+  } else {
+    moreWrap.innerHTML = '';
+  }
 }
 document.getElementById('filterRow').addEventListener('click', e=>{
   const b = e.target.closest('.filter-chip'); if(!b) return;
   document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
   b.classList.add('active');
+  portfolioExpanded = false;
   renderPortfolio(b.dataset.filter);
+});
+let portfolioResizeTimer;
+window.addEventListener('resize', ()=>{
+  clearTimeout(portfolioResizeTimer);
+  portfolioResizeTimer = setTimeout(()=>{ if(!portfolioExpanded) renderPortfolio(currentFilter); }, 200);
 });
 
 /* mobile drawer */
