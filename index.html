@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BAYOU — сайт, қосымша және AI-автоматтандыру агенттігі</title>
+<meta name="description" content="BAYOU агенттігі веб-сайт, SaaS-қосымша және AI-автоматтандыру жасайды. 35+ жоба, 1 күннен бастап дайын, қазақша және орысша қолдау.">
+<link rel="icon" href="Logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#060a07;
+    --bg-panel:#0b120d;
+    --bg-panel-2:#0f1712;
+    --bg-elevated:#121b15;
+    --line: rgba(230,240,230,0.09);
+    --line-strong: rgba(230,240,230,0.16);
+    --red:#e8451f;
+    --red-soft:#ff7a4d;
+    --gold:#c9a355;
+    --green:#22c55e;
+    --green-deep:#0f5c2c;
+    --green-glow:#4fe08a;
+    --text:#eef4ee;
+    --text-dim:#9fb2a3;
+    --text-faint:#6c7d70;
+    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.5), 0 2px 6px -2px rgba(34,197,94,0.12);
+    --shadow-md: 0 4px 10px rgba(0,0,0,0.45), 0 16px 32px -12px rgba(34,197,94,0.20), 0 8px 20px -10px rgba(232,69,31,0.12);
+    --shadow-lg: 0 8px 20px rgba(0,0,0,0.5), 0 30px 60px -20px rgba(34,197,94,0.25), 0 12px 30px -12px rgba(232,69,31,0.15);
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; scroll-padding-top: 88px; overflow-x:hidden; }
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 600px at 12% -10%, rgba(232,69,31,0.10), transparent 60%),
+      radial-gradient(1400px 800px at 90% 10%, rgba(34,197,94,0.08), transparent 55%),
+      var(--bg);
+    color:var(--text);
+    font-family:'Inter', system-ui, sans-serif;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    overscroll-behavior-y: contain;
+  }
+  h1,h2,h3,.mark,.brandtype{ font-family:'Manrope', 'Inter', sans-serif; }
+  a{ color:inherit; }
+  img{ max-width:100%; display:block; }
+  button{ font-family:inherit; }
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 24px; }
+  .wrap-narrow{ max-width:920px; margin:0 auto; padding:0 24px; }
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; }
+  }
+  :focus-visible{ outline:2px solid var(--green-glow); outline-offset:3px; border-radius:4px; }
+
+  /* grain overlay */
+  .grain{
+    position:absolute; inset:0; pointer-events:none; opacity:0.35; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- topbar ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:60;
+    background:rgba(6,10,7,0.82);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+    transition:box-shadow .3s var(--ease-smooth), background-color .3s var(--ease-smooth);
+  }
+  .topbar.scrolled{ box-shadow:var(--shadow-sm); background:rgba(6,10,7,0.94); }
+  .topbar-inner{
+    max-width:1180px; margin:0 auto; padding:10px 24px;
+    display:flex; align-items:center; justify-content:space-between; gap:20px;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; text-decoration:none; flex:none; }
+  .brand img{ height:34px; width:auto; display:block; mix-blend-mode:lighten; filter:drop-shadow(0 0 10px rgba(34,197,94,0.25)); }
+  nav.toc{ display:flex; gap:26px; flex-wrap:wrap; font-size:14px; color:var(--text-dim); margin:0 auto; }
+  nav.toc a{ text-decoration:none; border-bottom:1px solid transparent; padding-bottom:3px; transition:color .2s var(--ease-smooth), border-color .2s var(--ease-smooth); }
+  nav.toc a:hover{ color:var(--text); border-color:var(--green-glow); }
+  .topbar-right{ display:flex; align-items:center; gap:12px; flex:none; }
+
+  .lang-switch{ display:flex; border:1px solid var(--line-strong); border-radius:100px; padding:3px; gap:2px; background:var(--bg-panel); }
+  .lang-switch button{
+    border:none; background:transparent; color:var(--text-faint); font-size:12.5px; font-weight:700;
+    padding:5px 11px; border-radius:100px; cursor:pointer; transition:background-color .2s var(--ease-smooth), color .2s var(--ease-smooth);
+  }
+  .lang-switch button.active{ background:linear-gradient(135deg, var(--green-deep), var(--green)); color:#052012; }
+  .lang-switch button:hover:not(.active){ color:var(--text); }
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    font-weight:700; font-size:14.5px; padding:12px 22px; border-radius:100px;
+    border:1px solid transparent; cursor:pointer; text-decoration:none;
+    transition:transform .25s var(--ease-spring), box-shadow .25s var(--ease-smooth), background-color .25s var(--ease-smooth), border-color .25s var(--ease-smooth);
+    white-space:nowrap;
+  }
+  .btn-primary{ background:linear-gradient(135deg, var(--red) 0%, var(--gold) 55%, var(--green) 100%); color:#06110a; box-shadow:var(--shadow-md); }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:var(--shadow-lg); }
+  .btn-primary:active{ transform:translateY(0px) scale(0.98); }
+  .btn-ghost{ background:var(--bg-panel); color:var(--text); border-color:var(--line-strong); }
+  .btn-ghost:hover{ border-color:var(--green-glow); color:var(--green-glow); transform:translateY(-2px); }
+  .btn-ghost:active{ transform:translateY(0); }
+  .btn-sm{ padding:9px 16px; font-size:13px; }
+  .btn[disabled]{ opacity:.6; cursor:not-allowed; transform:none !important; }
+
+  .burger{ display:none; width:40px; height:40px; border-radius:10px; border:1px solid var(--line-strong); background:var(--bg-panel); cursor:pointer; position:relative; flex:none; }
+  .burger span{ position:absolute; left:9px; right:9px; height:2px; background:var(--text); border-radius:2px; transition:transform .3s var(--ease-spring), opacity .2s var(--ease-smooth); }
+  .burger span:nth-child(1){ top:14px; }
+  .burger span:nth-child(2){ top:19px; }
+  .burger span:nth-child(3){ top:24px; }
+  .burger.open span:nth-child(1){ transform:translateY(5px) rotate(45deg); }
+  .burger.open span:nth-child(2){ opacity:0; }
+  .burger.open span:nth-child(3){ transform:translateY(-5px) rotate(-45deg); }
+
+  .mobile-drawer{
+    display:none; position:fixed; inset:0; z-index:55; background:rgba(4,7,5,0.7); backdrop-filter:blur(6px);
+    opacity:0; pointer-events:none; transition:opacity .25s var(--ease-smooth);
+  }
+  .mobile-drawer.open{ opacity:1; pointer-events:auto; }
+  .mobile-drawer-panel{
+    position:absolute; top:0; right:0; height:100%; width:min(78vw, 320px);
+    background:var(--bg-panel); border-left:1px solid var(--line-strong);
+    padding:88px 26px 26px; display:flex; flex-direction:column; gap:22px;
+    transform:translateX(100%); transition:transform .35s var(--ease-smooth);
+  }
+  .mobile-drawer.open .mobile-drawer-panel{ transform:translateX(0); }
+  .mobile-drawer-panel a{ font-size:16px; text-decoration:none; color:var(--text); }
+  .mobile-drawer-panel .btn{ margin-top:10px; }
+
+  @media (max-width:860px){
+    nav.toc{ display:none; }
+    .burger{ display:block; }
+    .mobile-drawer{ display:block; }
+    .topbar-right .btn{ display:none; }
+  }
+
+  /* ---------- hero ---------- */
+  .hero{ position:relative; padding:96px 0 60px; text-align:center; overflow:hidden; }
+  .hero::before{ content:""; position:absolute; inset:-10% -10% auto -10%; height:520px;
+    background:radial-gradient(600px 300px at 50% 0%, rgba(34,197,94,0.16), transparent 65%); pointer-events:none; }
+  .hero-inner{ position:relative; z-index:1; }
+  .hero-logo{ width:min(460px, 80%); height:auto; margin:0 auto 34px; display:block; mix-blend-mode:lighten;
+    filter:drop-shadow(0 20px 50px rgba(34,197,94,0.22)); animation:riseIn .8s var(--ease-smooth) both; }
+  .kicker{ display:inline-block; color:var(--green-glow); font-size:13px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
+    border:1px solid rgba(79,224,138,0.3); background:rgba(79,224,138,0.08); border-radius:100px; padding:6px 16px; margin-bottom:20px;
+    animation:riseIn .8s var(--ease-smooth) .05s both; }
+  .hero h1{ font-size:clamp(30px, 5vw, 50px); font-weight:800; margin:0 0 20px; line-height:1.18; letter-spacing:-0.02em;
+    max-width:820px; margin-left:auto; margin-right:auto; animation:riseIn .8s var(--ease-smooth) .1s both; }
+  .hero .sub{ color:var(--text-dim); max-width:620px; margin:0 auto; font-size:16.5px; animation:riseIn .8s var(--ease-smooth) .18s both; }
+  .hero .cta-row{ margin-top:34px; display:flex; gap:14px; justify-content:center; flex-wrap:wrap; animation:riseIn .8s var(--ease-smooth) .26s both; }
+  .hero .stats{ margin-top:56px; display:flex; gap:36px; justify-content:center; flex-wrap:wrap; animation:riseIn .8s var(--ease-smooth) .34s both; }
+  .hero .stat b{ display:block; font-family:'Manrope',sans-serif; font-size:26px; font-weight:800;
+    background:linear-gradient(90deg, var(--red-soft), var(--gold) 50%, var(--green-glow)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .hero .stat span{ font-size:12.5px; color:var(--text-faint); }
+  @keyframes riseIn{ from{ opacity:0; transform:translateY(16px); } to{ opacity:1; transform:translateY(0); } }
+
+  .divider{ height:1px; background:linear-gradient(90deg, transparent, var(--red) 10%, var(--gold) 42%, var(--green) 72%, transparent); opacity:0.5; }
+
+  section{ padding:88px 0; position:relative; }
+  .section-head{ max-width:640px; margin:0 auto 48px; text-align:center; }
+  .section-head h2{ font-size:clamp(24px,3vw,32px); margin:0 0 12px; letter-spacing:-0.01em; }
+  .section-head p{ color:var(--text-dim); font-size:15.5px; margin:0; }
+  .section-alt{ background:linear-gradient(180deg, transparent, rgba(15,23,18,0.5) 12%, rgba(15,23,18,0.5) 88%, transparent); }
+
+  /* services */
+  .services-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  @media (max-width:960px){ .services-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:640px){ .services-grid{ grid-template-columns:1fr; } }
+  .svc-card{
+    border:1px solid var(--line); border-radius:var(--radius-md); padding:26px;
+    background:linear-gradient(180deg, var(--bg-panel), var(--bg-panel-2));
+    box-shadow:var(--shadow-sm); transition:transform .3s var(--ease-spring), box-shadow .3s var(--ease-smooth), border-color .3s var(--ease-smooth);
+  }
+  .svc-card:hover{ transform:translateY(-5px); box-shadow:var(--shadow-md); border-color:rgba(79,224,138,0.3); }
+  .svc-icon{ width:42px; height:42px; border-radius:12px; display:flex; align-items:center; justify-content:center; margin-bottom:16px;
+    background:linear-gradient(135deg, rgba(232,69,31,0.18), rgba(34,197,94,0.18)); border:1px solid var(--line-strong); }
+  .svc-icon svg{ width:20px; height:20px; stroke:var(--green-glow); }
+  .svc-card h3{ font-size:16.5px; margin:0 0 8px; font-weight:700; }
+  .svc-card p{ margin:0 0 16px; color:var(--text-dim); font-size:14px; }
+  .svc-meta{ display:flex; align-items:center; justify-content:space-between; font-size:13px; padding-top:14px; border-top:1px solid var(--line); }
+  .svc-meta .price{ font-family:'Manrope',sans-serif; font-weight:700; color:var(--green-glow); }
+  .svc-meta .time{ color:var(--text-faint); }
+
+  /* portfolio */
+  .filter-row{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-bottom:34px; }
+  .filter-chip{
+    border:1px solid var(--line-strong); background:var(--bg-panel); color:var(--text-dim); font-size:13.5px; font-weight:600;
+    padding:9px 18px; border-radius:100px; cursor:pointer; transition:all .25s var(--ease-smooth);
+  }
+  .filter-chip:hover{ color:var(--text); border-color:var(--green-glow); }
+  .filter-chip.active{ background:linear-gradient(135deg, var(--green-deep), var(--green)); color:#052012; border-color:transparent; }
+  .portfolio-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  @media (max-width:960px){ .portfolio-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:640px){ .portfolio-grid{ grid-template-columns:1fr; } }
+  .pf-card{
+    border:1px solid var(--line); border-radius:var(--radius-md); overflow:hidden; text-decoration:none; color:var(--text);
+    background:var(--bg-panel); box-shadow:var(--shadow-sm); display:flex; flex-direction:column;
+    transition:transform .3s var(--ease-spring), box-shadow .3s var(--ease-smooth), border-color .3s var(--ease-smooth);
+  }
+  .pf-card:hover{ transform:translateY(-6px); box-shadow:var(--shadow-md); border-color:rgba(79,224,138,0.3); }
+  .pf-thumb{ position:relative; aspect-ratio:16/10; overflow:hidden; background:var(--bg-panel-2); }
+  .pf-ph{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; transition:transform .5s var(--ease-smooth); }
+  .pf-card:hover .pf-ph{ transform:scale(1.06); }
+  .pf-ph::before{ content:""; position:absolute; inset:0; opacity:.5;
+    background-image:radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1.5px);
+    background-size:16px 16px; }
+  .pf-ph-site{ background:radial-gradient(120% 100% at 20% 15%, rgba(34,197,94,0.26), transparent 60%), var(--bg-panel-2); }
+  .pf-ph-app{ background:radial-gradient(120% 100% at 20% 15%, rgba(201,163,85,0.26), transparent 60%), var(--bg-panel-2); }
+  .pf-ph-ai{ background:radial-gradient(120% 100% at 20% 15%, rgba(232,69,31,0.26), transparent 60%), var(--bg-panel-2); }
+  .pf-ph span{ position:relative; z-index:1; font-family:'Manrope',sans-serif; font-weight:800; font-size:21px; letter-spacing:-0.01em;
+    text-align:center; line-height:1.25; padding:0 20px; display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+  .pf-ph-site span{ color:var(--green-glow); }
+  .pf-ph-app span{ color:var(--gold); }
+  .pf-ph-ai span{ color:var(--red-soft); }
+  .pf-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:top center; z-index:1;
+    transition:transform .5s var(--ease-smooth); background:var(--bg-panel-2); }
+  .pf-card:hover .pf-img{ transform:scale(1.06); }
+  .pf-thumb::after{ content:""; position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.65), transparent 60%); z-index:2; }
+  .pf-thumb .tag{
+    position:absolute; top:12px; left:12px; z-index:3; font-size:11px; font-weight:700; letter-spacing:0.02em;
+    padding:4px 11px; border-radius:100px; backdrop-filter:blur(6px);
+  }
+  .pf-phone{
+    position:absolute; right:10px; bottom:10px; z-index:4; width:46px; height:96px; border-radius:9px; overflow:hidden;
+    border:2px solid rgba(238,244,238,0.28); box-shadow:0 8px 18px rgba(0,0,0,0.55); background:#040705;
+    transition:transform .35s var(--ease-spring); transform-origin:bottom right;
+  }
+  .pf-card:hover .pf-phone{ transform:scale(1.08) translateY(-2px); }
+  .pf-phone img{ width:100%; height:100%; object-fit:cover; object-position:top center; display:block; }
+  .tag-site{ background:rgba(79,224,138,0.18); color:var(--green-glow); border:1px solid rgba(79,224,138,0.35); }
+  .tag-app{ background:rgba(201,163,85,0.18); color:var(--gold); border:1px solid rgba(201,163,85,0.35); }
+  .tag-ai{ background:rgba(255,122,77,0.18); color:var(--red-soft); border:1px solid rgba(255,122,77,0.35); }
+  .pf-body{ padding:18px 20px 20px; display:flex; flex-direction:column; gap:6px; flex:1; }
+  .pf-body h3{ font-size:15px; margin:0; font-weight:700; }
+  .pf-body p{ margin:0; font-size:13px; color:var(--text-dim); flex:1; }
+  .pf-link{ display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--green-glow); margin-top:10px; }
+  .pf-link svg{ width:14px; height:14px; transition:transform .25s var(--ease-spring); }
+  .pf-card:hover .pf-link svg{ transform:translate(3px,-3px); }
+
+  /* process */
+  .process-list{ display:flex; flex-direction:column; max-width:760px; margin:0 auto; }
+  .p-step{ display:flex; gap:22px; padding:26px 0; border-top:1px solid var(--line); }
+  .p-step:first-child{ border-top:none; }
+  .p-step .num{ font-family:'Manrope',sans-serif; font-weight:800; font-size:22px; width:52px; flex:none;
+    background:linear-gradient(135deg, var(--red-soft), var(--green-glow)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .p-step h3{ font-size:17px; margin:0 0 6px; font-weight:700; }
+  .p-step p{ margin:0 0 6px; color:var(--text-dim); font-size:14.5px; }
+  .p-step .dur{ font-size:12.5px; color:var(--text-faint); font-weight:600; }
+
+  /* why us */
+  .why-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  @media (max-width:900px){ .why-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:560px){ .why-grid{ grid-template-columns:1fr; } }
+  .why-card{ border:1px solid var(--line); border-radius:var(--radius-md); padding:22px; background:var(--bg-panel);
+    box-shadow:var(--shadow-sm); transition:transform .3s var(--ease-spring), border-color .3s var(--ease-smooth); }
+  .why-card:hover{ transform:translateY(-4px); border-color:rgba(201,163,85,0.35); }
+  .why-card h3{ font-size:15.5px; margin:0 0 8px; }
+  .why-card p{ margin:0; font-size:13.5px; color:var(--text-dim); }
+
+  /* pricing */
+  .price-table-wrap{ border:1px solid var(--line); border-radius:var(--radius-md); overflow:hidden; background:var(--bg-panel); box-shadow:var(--shadow-sm); }
+  table{ width:100%; border-collapse:collapse; font-size:14px; }
+  th,td{ text-align:left; padding:16px 18px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th{ color:var(--text-dim); font-weight:600; font-size:12px; text-transform:uppercase; letter-spacing:0.04em; background:rgba(255,255,255,0.02); }
+  tbody tr{ transition:background-color .2s var(--ease-smooth); }
+  tbody tr:hover{ background:rgba(34,197,94,0.05); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.svc-name{ font-weight:600; }
+  td.price{ font-family:'Manrope',sans-serif; font-weight:700; color:var(--green-glow); white-space:nowrap; }
+  .table-note{ font-size:13px; color:var(--text-faint); margin-top:18px; line-height:1.8; }
+  .table-note b{ color:var(--text-dim); }
+
+  /* faq */
+  .faq-list{ max-width:760px; margin:0 auto; display:flex; flex-direction:column; gap:10px; }
+  .faq-item{ border:1px solid var(--line); border-radius:var(--radius-sm); background:var(--bg-panel); overflow:hidden; }
+  .faq-q{ width:100%; text-align:left; background:none; border:none; color:var(--text); padding:18px 20px; font-size:15px; font-weight:600;
+    display:flex; justify-content:space-between; align-items:center; gap:16px; cursor:pointer; }
+  .faq-q svg{ flex:none; width:18px; height:18px; stroke:var(--green-glow); transition:transform .3s var(--ease-spring); }
+  .faq-item.open .faq-q svg{ transform:rotate(45deg); }
+  .faq-a-wrap{ display:grid; grid-template-rows:0fr; transition:grid-template-rows .35s var(--ease-smooth); }
+  .faq-item.open .faq-a-wrap{ grid-template-rows:1fr; }
+  .faq-a-inner{ overflow:hidden; }
+  .faq-a{ padding:0 20px 18px; color:var(--text-dim); font-size:14.5px; }
+
+  /* author */
+  .author-grid{ display:grid; grid-template-columns:280px 1fr; gap:44px; align-items:center; }
+  @media (max-width:760px){ .author-grid{ grid-template-columns:1fr; text-align:center; } }
+  .author-photo{ position:relative; border-radius:var(--radius-lg); overflow:hidden; box-shadow:var(--shadow-lg); border:1px solid var(--line-strong); }
+  .author-photo img{ width:100%; aspect-ratio:3/4; object-fit:cover; }
+  .author-photo::after{ content:""; position:absolute; inset:0; background:linear-gradient(to top, rgba(6,10,7,0.55), transparent 45%); }
+  .author-name{ font-size:22px; font-weight:800; margin:0 0 4px; }
+  .author-role{ color:var(--green-glow); font-size:13.5px; font-weight:600; margin:0 0 16px; }
+  .author-bio{ color:var(--text-dim); font-size:15px; max-width:520px; }
+  .author-links{ display:flex; gap:12px; margin-top:22px; flex-wrap:wrap; }
+  @media (max-width:760px){ .author-links{ justify-content:center; } }
+  .author-links a{ display:flex; align-items:center; gap:8px; border:1px solid var(--line-strong); border-radius:100px; padding:9px 18px;
+    text-decoration:none; font-size:13.5px; font-weight:600; color:var(--text); transition:border-color .2s var(--ease-smooth), color .2s var(--ease-smooth), transform .25s var(--ease-spring); }
+  .author-links a:hover{ border-color:var(--green-glow); color:var(--green-glow); transform:translateY(-2px); }
+  .author-links svg{ width:16px; height:16px; }
+  .author-strip{ display:flex; gap:12px; margin-top:30px; overflow-x:auto; padding-bottom:6px; }
+  .author-strip img{ height:96px; width:130px; object-fit:cover; border-radius:10px; flex:none; border:1px solid var(--line); }
+
+  /* contact */
+  .contact-grid{ display:grid; grid-template-columns:1.1fr 1fr; gap:40px; align-items:start; }
+  @media (max-width:860px){ .contact-grid{ grid-template-columns:1fr; } }
+  .form-card{ border:1px solid var(--line); border-radius:var(--radius-md); padding:28px; background:var(--bg-panel); box-shadow:var(--shadow-md); }
+  .field{ margin-bottom:16px; }
+  .field label{ display:block; font-size:13px; color:var(--text-dim); margin-bottom:7px; font-weight:600; }
+  .field input, .field select, .field textarea{
+    width:100%; background:var(--bg-panel-2); border:1px solid var(--line-strong); border-radius:10px; padding:11px 14px;
+    color:var(--text); font-size:14.5px; font-family:inherit; transition:border-color .2s var(--ease-smooth), box-shadow .2s var(--ease-smooth);
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{ outline:none; border-color:var(--green-glow); box-shadow:0 0 0 3px rgba(79,224,138,0.15); }
+  .field textarea{ resize:vertical; min-height:96px; }
+  .contact-side{ display:flex; flex-direction:column; gap:14px; }
+  .contact-tile{ border:1px solid var(--line); border-radius:var(--radius-md); padding:20px 22px; background:var(--bg-panel-2);
+    display:flex; align-items:center; gap:14px; text-decoration:none; color:var(--text); transition:transform .25s var(--ease-spring), border-color .2s var(--ease-smooth); }
+  .contact-tile:hover{ transform:translateY(-3px); border-color:rgba(79,224,138,0.3); }
+  .contact-tile .ic{ width:42px; height:42px; border-radius:11px; background:rgba(34,197,94,0.14); display:flex; align-items:center; justify-content:center; flex:none; }
+  .contact-tile .ic svg{ width:20px; height:20px; stroke:var(--green-glow); }
+  .contact-tile b{ display:block; font-size:14.5px; }
+  .contact-tile span{ display:block; font-size:12.5px; color:var(--text-faint); }
+
+  footer{ padding:50px 0 110px; text-align:center; color:var(--text-faint); font-size:13px; border-top:1px solid var(--line); }
+  footer .brand{ justify-content:center; margin-bottom:14px; }
+  footer .foot-links{ display:flex; gap:18px; justify-content:center; flex-wrap:wrap; margin:16px 0; font-size:13px; }
+  footer .foot-links a{ color:var(--text-dim); text-decoration:none; }
+  footer .foot-links a:hover{ color:var(--green-glow); }
+
+  /* floating buttons */
+  .float-stack{ position:fixed; right:20px; bottom:20px; z-index:70; display:flex; flex-direction:column; align-items:flex-end; gap:14px; }
+  .fab{
+    width:58px; height:58px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:none; cursor:pointer;
+    box-shadow:var(--shadow-lg); position:relative; transition:transform .25s var(--ease-spring);
+  }
+  .fab:hover{ transform:translateY(-3px) scale(1.04); }
+  .fab:active{ transform:scale(0.96); }
+  .fab-wa{ background:radial-gradient(circle at 35% 30%, #3fe07a, #17a34a 60%, #0f5c2c); }
+  .fab-wa svg{ width:27px; height:27px; fill:#052012; }
+  .fab-wa::before{ content:""; position:absolute; inset:0; border-radius:50%; border:2px solid #c9e07a; opacity:0.6; animation:ping 2.6s ease-out infinite; }
+  @keyframes ping{ 0%{ transform:scale(1); opacity:0.55; } 100%{ transform:scale(1.7); opacity:0; } }
+  .fab-ai{ width:50px; height:50px; background:linear-gradient(135deg, var(--red), var(--gold)); align-self:flex-end; }
+  .fab-ai svg{ width:24px; height:24px; fill:#1a0d09; }
+
+  .ai-panel{
+    position:fixed; right:20px; bottom:92px; z-index:71; width:min(340px, calc(100vw - 40px)); max-height:min(460px, 60vh);
+    background:var(--bg-panel); border:1px solid var(--line-strong); border-radius:var(--radius-md); box-shadow:var(--shadow-lg);
+    display:flex; flex-direction:column; overflow:hidden; transform:translateY(16px) scale(0.97); opacity:0; pointer-events:none;
+    transition:transform .3s var(--ease-spring), opacity .25s var(--ease-smooth);
+  }
+  .ai-panel.open{ transform:translateY(0) scale(1); opacity:1; pointer-events:auto; }
+  .ai-head{ padding:14px 16px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:10px; font-weight:700; font-size:13.5px; }
+  .ai-dot{ width:8px; height:8px; border-radius:50%; background:var(--green-glow); box-shadow:0 0 8px var(--green-glow); }
+  .ai-body{ flex:1; overflow-y:auto; padding:14px 16px; display:flex; flex-direction:column; gap:10px; font-size:13.5px; }
+  .ai-msg{ max-width:86%; padding:10px 13px; border-radius:12px; line-height:1.55; }
+  .ai-msg.bot{ background:var(--bg-panel-2); align-self:flex-start; border:1px solid var(--line); }
+  .ai-msg.user{ background:linear-gradient(135deg, var(--green-deep), var(--green)); color:#052012; align-self:flex-end; font-weight:600; }
+  .ai-input-row{ display:flex; gap:8px; padding:12px; border-top:1px solid var(--line); }
+  .ai-input-row input{ flex:1; background:var(--bg-panel-2); border:1px solid var(--line-strong); border-radius:100px; padding:9px 14px; color:var(--text); font-size:13.5px; }
+  .ai-input-row input:focus{ outline:none; border-color:var(--green-glow); }
+  .ai-input-row button{ width:36px; height:36px; border-radius:50%; border:none; background:var(--green); color:#052012; cursor:pointer; display:flex; align-items:center; justify-content:center; flex:none; }
+  .ai-input-row button svg{ width:16px; height:16px; }
+  @media (max-width:480px){ .float-stack{ right:14px; bottom:14px; } .ai-panel{ right:14px; bottom:84px; } }
+</style>
+</head>
+<body>
+
+<div class="topbar" id="topbar">
+  <div class="topbar-inner">
+    <a href="#top" class="brand"><img src="Logo.png" alt="BAYOU"></a>
+    <nav class="toc">
+      <a href="#services" data-i18n="nav.services">Қызметтер</a>
+      <a href="#portfolio" data-i18n="nav.portfolio">Портфолио</a>
+      <a href="#process" data-i18n="nav.process">Процесс</a>
+      <a href="#pricing" data-i18n="nav.pricing">Баға</a>
+      <a href="#faq" data-i18n="nav.faq">Сұрақтар</a>
+      <a href="#contact" data-i18n="nav.contact">Байланыс</a>
+    </nav>
+    <div class="topbar-right">
+      <div class="lang-switch" id="langSwitch">
+        <button data-lang="kk" class="active">KK</button>
+        <button data-lang="ru">RU</button>
+      </div>
+      <a href="#contact" class="btn btn-primary btn-sm" data-i18n="nav.cta">Тапсырыс беру</a>
+      <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</div>
+
+<div class="mobile-drawer" id="drawer">
+  <div class="mobile-drawer-panel">
+    <a href="#services" data-i18n="nav.services">Қызметтер</a>
+    <a href="#portfolio" data-i18n="nav.portfolio">Портфолио</a>
+    <a href="#process" data-i18n="nav.process">Процесс</a>
+    <a href="#pricing" data-i18n="nav.pricing">Баға</a>
+    <a href="#faq" data-i18n="nav.faq">Сұрақтар</a>
+    <a href="#contact" data-i18n="nav.contact">Байланыс</a>
+    <a href="#contact" class="btn btn-primary" data-i18n="nav.cta">Тапсырыс беру</a>
+  </div>
+</div>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="grain"></div>
+    <div class="wrap hero-inner">
+      <img src="Logo.png" alt="BAYOU" class="hero-logo">
+      <span class="kicker" data-i18n="hero.kicker">Сайт пен қосымша — 1 күннен бастап дайын</span>
+      <h1 data-i18n="hero.h1">Идеяңызды бірнеше күнде жұмыс істейтін сайтқа айналдырамыз</h1>
+      <p class="sub" data-i18n="hero.sub">BAYOU — веб-сайт, SaaS-қосымша және AI-автоматтандыру бойынша толық циклмен жұмыс істейтін команда. 35+ аяқталған жоба, қазақша мен орысша толық қолдау, әр жобаға жеке дизайн.</p>
+      <div class="cta-row">
+        <a href="#portfolio" class="btn btn-primary" data-i18n="hero.cta1">Портфолионы қарау</a>
+        <a href="#contact" class="btn btn-ghost" data-i18n="hero.cta2">Тапсырыс беру</a>
+      </div>
+      <div class="stats">
+        <div class="stat"><b>35+</b><span data-i18n="hero.stat1">дайын жоба</span></div>
+        <div class="stat"><b>1<span data-i18n="hero.stat2u"> күннен</span></b><span data-i18n="hero.stat2">бастап дайын</span></div>
+        <div class="stat"><b>KK / RU</b><span data-i18n="hero.stat3">толық тілдік қолдау</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><div class="divider"></div></div>
+
+  <section id="services">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 data-i18n="services.title">Қызметтер</h2>
+        <p data-i18n="services.lead">Бір беттік сайттан бастап толық AI-автоматтандыруға дейін — әр қызметтің бағасы мен мерзімі алдын ала белгілі.</p>
+      </div>
+      <div class="services-grid" id="servicesGrid"></div>
+    </div>
+  </section>
+
+  <section id="portfolio" class="section-alt">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 data-i18n="pf.title">Портфолио</h2>
+        <p data-i18n="pf.lead">35+ жұмыс істейтін жоба — сайттар, платформалар және AI-шешімдер. Әр карточка тірі сайтқа апарады.</p>
+      </div>
+      <div class="filter-row" id="filterRow">
+        <button class="filter-chip active" data-filter="all" data-i18n="pf.filter.all">Барлығы</button>
+        <button class="filter-chip" data-filter="site" data-i18n="pf.filter.site">Сайт</button>
+        <button class="filter-chip" data-filter="app" data-i18n="pf.filter.app">Қосымша</button>
+        <button class="filter-chip" data-filter="ai" data-i18n="pf.filter.ai">AI</button>
+      </div>
+      <div class="portfolio-grid" id="portfolioGrid"></div>
+    </div>
+  </section>
+
+  <section id="process">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 data-i18n="process.title">Жұмыс процесі</h2>
+        <p data-i18n="process.lead">Брифингтен тапсыруға дейін бес нақты қадам, әр қадамның мерзімі белгілі.</p>
+      </div>
+      <div class="process-list" id="processList"></div>
+    </div>
+  </section>
+
+  <section id="why" class="section-alt">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 data-i18n="why.title">Неге BAYOU</h2>
+        <p data-i18n="why.lead">Жылдамдық, ашық баға және AI-тәжірибе — бір командада.</p>
+      </div>
+      <div class="why-grid" id="whyGrid"></div>
+    </div>
+  </section>
+
+  <section id="pricing">
+    <div class="wrap-narrow">
+      <div class="section-head">
+        <h2 data-i18n="pricing.title">Қызмет пен баға кестесі</h2>
+        <p data-i18n="pricing.lead">Барлық баға ₸ түрінде, соңғы баға жоба көлеміне қарай нақтыланады.</p>
+      </div>
+      <div class="price-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th data-i18n="pricing.th1">Қызмет</th>
+              <th data-i18n="pricing.th2">Баға</th>
+              <th data-i18n="pricing.th3">Мерзім</th>
+            </tr>
+          </thead>
+          <tbody id="pricingBody"></tbody>
+        </table>
+      </div>
+      <div class="table-note">
+        <b data-i18n="pricing.note1b">AI-ассистент қосымшасы:</b> <span data-i18n="pricing.note1">+10 000 ₸, кез келген қызметке қосымша ретінде беріледі.</span><br>
+        <b data-i18n="pricing.note2b">Домен:</b> <span data-i18n="pricing.note2">шамамен 10 000 ₸, клиент өз атына сатып алады, жоғарыдағы бағаға кірмейді.</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq" class="section-alt">
+    <div class="wrap-narrow">
+      <div class="section-head">
+        <h2 data-i18n="faq.title">Жиі қойылатын сұрақтар</h2>
+      </div>
+      <div class="faq-list" id="faqList"></div>
+    </div>
+  </section>
+
+  <section id="author">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 data-i18n="author.title">Автор туралы</h2>
+      </div>
+      <div class="author-grid">
+        <div class="author-photo">
+          <img src="Avtor/photo_5283122035838528171_y (1).jpg" alt="BAYOU founder">
+        </div>
+        <div>
+          <p class="author-role" data-i18n="author.role">BAYOU негізін қалаушы</p>
+          <h3 class="author-name">@subhankul_minayhan</h3>
+          <p class="author-bio" data-i18n="author.bio">Сайт, қосымша және AI-автоматтандыру жобаларын толық циклмен жүргізеді — брифингтен бастап тапсыруға дейін. 35+ жобада клиенттермен тікелей жұмыс істеп, әр жобаға жеке қарайды.</p>
+          <div class="author-links">
+            <a href="https://www.instagram.com/subhankul_minayhan/" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1"/></svg>
+              Instagram
+            </a>
+            <a href="https://taplink.cc/minayhan" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1.5-1.5"/></svg>
+              Taplink
+            </a>
+          </div>
+          <div class="author-strip">
+            <img src="Avtor/0139 - production.kz - GH5C2183.jpg" alt="">
+            <img src="Avtor/0109 - production.kz - GH5C2081 (1).jpg" alt="">
+            <img src="Avtor/0142 - production.kz - G84C0196.jpg" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section-alt">
+    <div class="wrap">
+      <div class="section-head">
+        <h2 data-i18n="contact.title">Байланысқа шығыңыз</h2>
+        <p data-i18n="contact.lead">Қысқаша брифинг толтырыңыз — хабарлама тікелей WhatsApp-қа түседі.</p>
+      </div>
+      <div class="contact-grid">
+        <form class="form-card" id="briefForm">
+          <div class="field">
+            <label data-i18n="contact.name">Атыңыз</label>
+            <input type="text" id="f-name" required>
+          </div>
+          <div class="field">
+            <label data-i18n="contact.service">Қызмет түрі</label>
+            <select id="f-service">
+              <option data-i18n="contact.opt1">Бір беттік сайт</option>
+              <option data-i18n="contact.opt2">Админ-панельді сайт</option>
+              <option data-i18n="contact.opt3">SaaS / қосымша / интернет-дүкен</option>
+              <option data-i18n="contact.opt4">Чат-бот / AI</option>
+              <option data-i18n="contact.opt5">Автоматтандыру</option>
+            </select>
+          </div>
+          <div class="field">
+            <label data-i18n="contact.budget">Болжамды бюджет</label>
+            <input type="text" id="f-budget" data-i18n-placeholder="contact.budgetph" placeholder="мысалы, 100 000 ₸">
+          </div>
+          <div class="field">
+            <label data-i18n="contact.desc">Жоба сипаттамасы</label>
+            <textarea id="f-desc" data-i18n-placeholder="contact.descph" placeholder="Не істеу керек екенін қысқаша жазыңыз"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;" data-i18n="contact.submit">WhatsApp арқылы жіберу</button>
+        </form>
+        <div class="contact-side">
+          <a class="contact-tile" href="https://wa.me/77471673817" target="_blank" rel="noopener">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.5L3 20l1.1-5.4A8.5 8.5 0 1 1 21 11.5Z"/></svg></span>
+            <span><b>WhatsApp</b><span>+7 747 167 3817</span></span>
+          </a>
+          <a class="contact-tile" href="https://www.instagram.com/subhankul_minayhan/" target="_blank" rel="noopener">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/></svg></span>
+            <span><b>Instagram</b><span>@subhankul_minayhan</span></span>
+          </a>
+          <a class="contact-tile" href="https://taplink.cc/minayhan" target="_blank" rel="noopener">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1.5-1.5"/></svg></span>
+            <span><b>Taplink</b><span>taplink.cc/minayhan</span></span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <a href="#top" class="brand"><img src="Logo.png" alt="BAYOU" style="height:26px;mix-blend-mode:lighten;"></a>
+    <div class="foot-links">
+      <a href="#services" data-i18n="nav.services">Қызметтер</a>
+      <a href="#portfolio" data-i18n="nav.portfolio">Портфолио</a>
+      <a href="#pricing" data-i18n="nav.pricing">Баға</a>
+      <a href="#contact" data-i18n="nav.contact">Байланыс</a>
+    </div>
+    <span data-i18n="footer.copy">© 2026 BAYOU. Барлық құқықтар қорғалған.</span>
+  </div>
+</footer>
+
+<div class="float-stack">
+  <div class="ai-panel" id="aiPanel">
+    <div class="ai-head"><span class="ai-dot"></span> <span data-i18n="ai.title">BAYOU AI-ассистент (демо)</span></div>
+    <div class="ai-body" id="aiBody"></div>
+    <div class="ai-input-row">
+      <input type="text" id="aiInput" data-i18n-placeholder="ai.placeholder" placeholder="Сұрағыңызды жазыңыз...">
+      <button id="aiSend" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" stroke="#052012" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    </div>
+  </div>
+  <button class="fab fab-ai" id="aiToggle" aria-label="AI assistant">
+    <svg viewBox="0 0 24 24"><path d="M12 2.5c.7 3.2 1.4 4.6 2.4 5.6 1 1 2.4 1.7 5.6 2.4-3.2.7-4.6 1.4-5.6 2.4-1 1-1.7 2.4-2.4 5.6-.7-3.2-1.4-4.6-2.4-5.6-1-1-2.4-1.7-5.6-2.4 3.2-.7 4.6-1.4 5.6-2.4 1-1 1.7-2.4 2.4-5.6Z"/><path d="M19 2.5c.28 1.15.55 1.65.9 2 .35.35.85.62 2 .9-1.15.28-1.65.55-2 .9-.35.35-.62.85-.9 2-.28-1.15-.55-1.65-.9-2-.35-.35-.85-.62-2-.9 1.15-.28 1.65-.55 2-.9.35-.35.62-.85.9-2Z"/></svg>
+  </button>
+  <a class="fab fab-wa" href="https://wa.me/77471673817" target="_blank" rel="noopener" aria-label="WhatsApp">
+    <svg viewBox="0 0 24 24"><path d="M17.5 14.4c-.3-.1-1.6-.8-1.9-.9-.3-.1-.4-.1-.6.1-.2.3-.7.9-.8 1-.2.2-.3.2-.5.1-.3-.1-1.2-.4-2.2-1.4-.8-.7-1.4-1.6-1.5-1.9-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.1.2-.3.3-.4.1-.2 0-.4 0-.5C11.7 9 11.2 7.8 11 7.3c-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.3.3-1 1-1 2.4s1 2.8 1.2 3c.1.2 2 3.1 5 4.3.7.3 1.2.5 1.7.6.7.2 1.3.2 1.8.1.5-.1 1.6-.7 1.9-1.3.2-.6.2-1.1.2-1.2-.1-.2-.3-.2-.5-.3Z"/><path d="M12 2A10 10 0 0 0 3.5 17.4L2 22l4.7-1.5A10 10 0 1 0 12 2Z"/></svg>
+  </a>
+</div>
+
+<script>
+const I18N = {
+  kk: {
+    'nav.services':'Қызметтер','nav.portfolio':'Портфолио','nav.process':'Процесс','nav.pricing':'Баға','nav.faq':'Сұрақтар','nav.contact':'Байланыс','nav.cta':'Тапсырыс беру',
+    'hero.kicker':'Сайт пен қосымша — 1 күннен бастап дайын',
+    'hero.h1':'Идеяңызды бірнеше күнде жұмыс істейтін сайтқа айналдырамыз',
+    'hero.sub':'BAYOU — веб-сайт, SaaS-қосымша және AI-автоматтандыру бойынша толық циклмен жұмыс істейтін команда. 35+ аяқталған жоба, қазақша мен орысша толық қолдау, әр жобаға жеке дизайн.',
+    'hero.cta1':'Портфолионы қарау','hero.cta2':'Тапсырыс беру',
+    'hero.stat1':'дайын жоба','hero.stat2u':' күннен','hero.stat2':'бастап дайын','hero.stat3':'толық тілдік қолдау',
+    'services.title':'Қызметтер','services.lead':'Бір беттік сайттан бастап толық AI-автоматтандыруға дейін — әр қызметтің бағасы мен мерзімі алдын ала белгілі.',
+    'pf.title':'Портфолио','pf.lead':'35+ жұмыс істейтін жоба — сайттар, платформалар және AI-шешімдер. Әр карточка тірі сайтқа апарады.',
+    'pf.filter.all':'Барлығы','pf.filter.site':'Сайт','pf.filter.app':'Қосымша','pf.filter.ai':'AI',
+    'pf.visit':'Сайтты көру',
+    'process.title':'Жұмыс процесі','process.lead':'Брифингтен тапсыруға дейін бес нақты қадам, әр қадамның мерзімі белгілі.',
+    'why.title':'Неге BAYOU','why.lead':'Жылдамдық, ашық баға және AI-тәжірибе — бір командада.',
+    'pricing.title':'Қызмет пен баға кестесі','pricing.lead':'Барлық баға ₸ түрінде, соңғы баға жоба көлеміне қарай нақтыланады.',
+    'pricing.th1':'Қызмет','pricing.th2':'Баға','pricing.th3':'Мерзім',
+    'pricing.note1b':'AI-ассистент қосымшасы:','pricing.note1':'+10 000 ₸, кез келген қызметке қосымша ретінде беріледі.',
+    'pricing.note2b':'Домен:','pricing.note2':'шамамен 10 000 ₸, клиент өз атына сатып алады, жоғарыдағы бағаға кірмейді.',
+    'faq.title':'Жиі қойылатын сұрақтар',
+    'author.title':'Автор туралы','author.role':'BAYOU негізін қалаушы',
+    'author.bio':'Сайт, қосымша және AI-автоматтандыру жобаларын толық циклмен жүргізеді — брифингтен бастап тапсыруға дейін. 35+ жобада клиенттермен тікелей жұмыс істеп, әр жобаға жеке қарайды.',
+    'contact.title':'Байланысқа шығыңыз','contact.lead':'Қысқаша брифинг толтырыңыз — хабарлама тікелей WhatsApp-қа түседі.',
+    'contact.name':'Атыңыз','contact.service':'Қызмет түрі','contact.budget':'Болжамды бюджет','contact.budgetph':'мысалы, 100 000 ₸',
+    'contact.desc':'Жоба сипаттамасы','contact.descph':'Не істеу керек екенін қысқаша жазыңыз','contact.submit':'WhatsApp арқылы жіберу',
+    'contact.opt1':'Бір беттік сайт','contact.opt2':'Админ-панельді сайт','contact.opt3':'SaaS / қосымша / интернет-дүкен','contact.opt4':'Чат-бот / AI','contact.opt5':'Автоматтандыру',
+    'footer.copy':'© 2026 BAYOU. Барлық құқықтар қорғалған.',
+    'ai.title':'BAYOU AI-ассистент (демо)','ai.placeholder':'Сұрағыңызды жазыңыз...',
+    'ai.greet':'Сәлем! Мен BAYOU-дың демо AI-ассистентімін. Баға, мерзім немесе қызметтер туралы сұраңыз.',
+    'ai.fallback':'Бұл — қысқа демо-жауап. Толық ақпарат үшін WhatsApp арқылы жазыңыз: +7 747 167 3817.',
+    'ai.price':'Бағалар 50 000 ₸-ден басталады (бір беттік сайт), SaaS/қосымша 750 000 ₸-ден. Толық кесте — «Баға» бөлімінде.',
+    'ai.time':'Ең жылдам жоба (бір беттік сайт) 1-3 күнде дайын болады, күрделі жүйелер 14-30 күн алады.',
+    'ai.service':'Біз сайт, админ-панель, SaaS/қосымша, чат-бот пен AI, компанияға автоматтандыру жасаймыз.'
+  },
+  ru: {
+    'nav.services':'Услуги','nav.portfolio':'Портфолио','nav.process':'Процесс','nav.pricing':'Цены','nav.faq':'Вопросы','nav.contact':'Контакты','nav.cta':'Оставить заявку',
+    'hero.kicker':'Сайт и приложение — готовы от 1 дня',
+    'hero.h1':'Превращаем вашу идею в работающий сайт за несколько дней',
+    'hero.sub':'BAYOU — команда полного цикла: веб-сайты, SaaS-приложения и AI-автоматизация. 35+ реализованных проектов, полная поддержка на казахском и русском, индивидуальный дизайн для каждого проекта.',
+    'hero.cta1':'Смотреть портфолио','hero.cta2':'Оставить заявку',
+    'hero.stat1':'готовых проектов','hero.stat2u':' дня','hero.stat2':'от','hero.stat3':'полная поддержка языков',
+    'services.title':'Услуги','services.lead':'От одностраничного сайта до полной AI-автоматизации — цена и срок каждой услуги известны заранее.',
+    'pf.title':'Портфолио','pf.lead':'35+ работающих проектов — сайты, платформы и AI-решения. Каждая карточка ведёт на живой сайт.',
+    'pf.filter.all':'Все','pf.filter.site':'Сайты','pf.filter.app':'Приложения','pf.filter.ai':'AI',
+    'pf.visit':'Смотреть сайт',
+    'process.title':'Процесс работы','process.lead':'От брифинга до сдачи проекта — пять понятных шагов, срок каждого известен заранее.',
+    'why.title':'Почему BAYOU','why.lead':'Скорость, прозрачные цены и опыт с AI — в одной команде.',
+    'pricing.title':'Таблица услуг и цен','pricing.lead':'Все цены в ₸, итоговая стоимость уточняется по объёму проекта.',
+    'pricing.th1':'Услуга','pricing.th2':'Цена','pricing.th3':'Срок',
+    'pricing.note1b':'AI-ассистент:','pricing.note1':'+10 000 ₸, добавляется к любой услуге как опция.',
+    'pricing.note2b':'Домен:','pricing.note2':'около 10 000 ₸, клиент покупает на своё имя, не входит в цены выше.',
+    'faq.title':'Частые вопросы',
+    'author.title':'Об авторе','author.role':'Основатель BAYOU',
+    'author.bio':'Ведёт проекты по сайтам, приложениям и AI-автоматизации полным циклом — от брифинга до сдачи. Более 35 проектов, личная работа с каждым клиентом.',
+    'contact.title':'Свяжитесь с нами','contact.lead':'Заполните короткий бриф — сообщение сразу придёт в WhatsApp.',
+    'contact.name':'Ваше имя','contact.service':'Тип услуги','contact.budget':'Примерный бюджет','contact.budgetph':'например, 100 000 ₸',
+    'contact.desc':'Описание проекта','contact.descph':'Кратко опишите, что нужно сделать','contact.submit':'Отправить через WhatsApp',
+    'contact.opt1':'Одностраничный сайт','contact.opt2':'Сайт с админ-панелью','contact.opt3':'SaaS / приложение / интернет-магазин','contact.opt4':'Чат-бот / AI','contact.opt5':'Автоматизация',
+    'footer.copy':'© 2026 BAYOU. Все права защищены.',
+    'ai.title':'AI-ассистент BAYOU (демо)','ai.placeholder':'Напишите вопрос...',
+    'ai.greet':'Привет! Я демо AI-ассистент BAYOU. Спросите про цены, сроки или услуги.',
+    'ai.fallback':'Это короткий демо-ответ. Для подробностей напишите в WhatsApp: +7 747 167 3817.',
+    'ai.price':'Цены начинаются от 50 000 ₸ (одностраничный сайт), SaaS/приложение — от 750 000 ₸. Полная таблица в разделе «Цены».',
+    'ai.time':'Самый быстрый проект (одностраничный сайт) готов за 1-3 дня, сложные системы — 14-30 дней.',
+    'ai.service':'Мы делаем сайты, админ-панели, SaaS/приложения, чат-ботов и AI, автоматизацию для компаний.'
+  }
+};
+
+const SERVICES = [
+  { icon:'M4 6h16M4 12h10M4 18h7', kk:{h:'Бір беттік сайт', d:'Жарнамалық / визитка-сайт, жылдам іске қосылады.'}, ru:{h:'Одностраничный сайт', d:'Рекламный сайт-визитка, быстрый запуск.'}, price:'50 000 – 100 000 ₸', time:{kk:'1–3 күн',ru:'1–3 дня'} },
+  { icon:'M4 5h16v10H4zM8 19h8', kk:{h:'Админ-панельді сайт', d:'Контентті өзіңіз басқаратын толық сайт.'}, ru:{h:'Сайт с админ-панелью', d:'Полный сайт с управлением контентом.'}, price:'100 000 – 350 000 ₸', time:{kk:'3–7 күн',ru:'3–7 дней'} },
+  { icon:'M12 3l8 4v10l-8 4-8-4V7z', kk:{h:'SaaS / қосымша / дүкен', d:'Интернет-дүкен, мобильді немесе веб-қосымша.'}, ru:{h:'SaaS / приложение / магазин', d:'Интернет-магазин, мобильное или веб-приложение.'}, price:'750 000 – 3 000 000 ₸', time:{kk:'14–30 күн',ru:'14–30 дней'} },
+  { icon:'M8 10h8M8 14h5M21 12a9 9 0 1 1-4-7.5L21 3l-1 4.5', kk:{h:'Чат-бот және AI', d:'AI-инженерлік жұмыстар, тапсырма бойынша.'}, ru:{h:'Чат-бот и AI', d:'AI-инжиниринг под конкретную задачу.'}, price:{kk:'Жеке келісім',ru:'Индивидуально'}, time:{kk:'Жобаға байланысты',ru:'По проекту'} },
+  { icon:'M12 2v4M12 18v4M4 12H2M22 12h-2M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2', kk:{h:'Автоматтандыру', d:'AI-құралдарды команданың өз қолымен енгіземіз.'}, ru:{h:'Автоматизация', d:'Внедряем AI-инструменты вместе с вашей командой.'}, price:'1 000 000 – 5 000 000 ₸', time:{kk:'Келісім бойынша',ru:'По договорённости'} }
+];
+
+const PROCESS = [
+  { kk:{h:'Брифинг', d:'Мақсатыңыз бен бизнес-моделіңізді талдаймыз.', t:'1 күн'}, ru:{h:'Брифинг', d:'Анализируем цель и бизнес-модель.', t:'1 день'} },
+  { kk:{h:'Дизайн ұсыну', d:'Бренд стиліне сай макет дайындап, бекітеміз.', t:'1–2 күн'}, ru:{h:'Дизайн-предложение', d:'Готовим и согласовываем макет в стиле бренда.', t:'1–2 дня'} },
+  { kk:{h:'Әзірлеу', d:'Бекітілген дизайн бойынша толық функционалды құрамыз.', t:'қызмет түріне байланысты'}, ru:{h:'Разработка', d:'Собираем полный функционал по утверждённому дизайну.', t:'зависит от услуги'} },
+  { kk:{h:'Тестілеу', d:'Барлық құрылғыда, екі тілде тексереміз.', t:'1 күн'}, ru:{h:'Тестирование', d:'Проверяем на всех устройствах, на двух языках.', t:'1 день'} },
+  { kk:{h:'Тапсыру', d:'Домен мен хостингке орналастырып, нұсқаулық береміз.', t:'1 күн'}, ru:{h:'Сдача проекта', d:'Разворачиваем на домене и хостинге, даём инструкцию.', t:'1 день'} }
+];
+
+const WHY = [
+  { kk:{h:'Жылдамдық', d:'1 күннен бастап дайын жоба.'}, ru:{h:'Скорость', d:'Готовый проект от 1 дня.'} },
+  { kk:{h:'Баға ашықтығы', d:'Жасырын төлем жоқ, баға алдын ала белгілі.'}, ru:{h:'Прозрачные цены', d:'Никаких скрытых платежей, цена известна заранее.'} },
+  { kk:{h:'Екі тілде қызмет', d:'Қазақша және орысша толық қолдау.'}, ru:{h:'Два языка', d:'Полная поддержка на казахском и русском.'} },
+  { kk:{h:'AI-тәжірибе', d:'AI-ассистентті сайтқа тікелей енгіземіз.'}, ru:{h:'Опыт с AI', d:'Внедряем AI-ассистента прямо на сайт.'} },
+  { kk:{h:'Команданы оқыту', d:'Автоматтандыруды қызметкерлеріңізбен бірге енгіземіз.'}, ru:{h:'Обучение команды', d:'Внедряем автоматизацию вместе с вашей командой.'} },
+  { kk:{h:'Жеке қарым-қатынас', d:'Әр жобаны негізін қалаушы жеке жүргізеді.'}, ru:{h:'Личный подход', d:'Каждый проект лично ведёт основатель.'} }
+];
+
+const PRICING = [
+  { kk:'Жарнамалық бір беттік сайт', ru:'Рекламный одностраничный сайт', price:'50 000 – 100 000 ₸', time:{kk:'1–3 күн',ru:'1–3 дня'} },
+  { kk:'Админ-панельді сайт', ru:'Сайт с админ-панелью', price:'100 000 – 350 000 ₸', time:{kk:'3–7 күн',ru:'3–7 дней'} },
+  { kk:'SaaS жүйе / интернет-дүкен / мобильді қосымша', ru:'SaaS-система / интернет-магазин / мобильное приложение', price:'750 000 – 3 000 000 ₸', time:{kk:'14–30 күн',ru:'14–30 дней'} },
+  { kk:'Чат-бот және басқа AI инженерлік жұмыстар', ru:'Чат-бот и другие AI-инженерные работы', price:{kk:'Жеке келісім',ru:'Индивидуально'}, time:{kk:'Жобаға байланысты',ru:'По проекту'} },
+  { kk:'Автоматтандыру және AI-құралдар: команданың өз қолымен бірге енгіземіз', ru:'Автоматизация и AI-инструменты: внедрим руками вместе с вашей командой', price:'1 000 000 – 5 000 000 ₸', time:{kk:'Келісім бойынша',ru:'По договорённости'} }
+];
+
+const FAQ = [
+  { kk:{q:'Домен қалай алынады?', a:'Домен клиенттің өз атына сатып алынады, шамамен 10 000 ₸ тұрады, біз тек баптап береміз.'}, ru:{q:'Как приобретается домен?', a:'Домен покупается на имя клиента, стоит около 10 000 ₸, мы только настраиваем его.'} },
+  { kk:{q:'AI-ассистент нені істейді?', a:'Сайтта тұрған AI-ассистент клиенттің сұрақтарына автоматты жауап беріп, қызмет пен баға туралы айтады, +10 000 ₸ тұрады.'}, ru:{q:'Что делает AI-ассистент?', a:'AI-ассистент на сайте автоматически отвечает на вопросы клиентов, рассказывает об услугах и ценах, стоит +10 000 ₸.'} },
+  { kk:{q:'Мерзімге кепілдік бар ма?', a:'Иә, әр қызметтің мерзімі баға кестесінде көрсетілген, келісілген мерзімнен кешікпейміз.'}, ru:{q:'Есть ли гарантия сроков?', a:'Да, срок каждой услуги указан в таблице цен, мы не задерживаем согласованные сроки.'} },
+  { kk:{q:'Төлем қалай бөлінеді?', a:'Әдетте 50% алдын ала, қалған 50% жоба тапсырылған соң төленеді.'}, ru:{q:'Как делится оплата?', a:'Обычно 50% предоплата, остальные 50% — после сдачи проекта.'} },
+  { kk:{q:'Дайын сайтқа қолдау көрсетесіздер ме?', a:'Иә, тапсырғаннан кейін де техникалық қолдау мен өзгертулер бойынша хабарласуға болады.'}, ru:{q:'Оказываете поддержку после сдачи?', a:'Да, после сдачи можно обращаться по техподдержке и доработкам.'} }
+];
+
+const PORTFOLIO = [
+  { url:'https://ziyatfrontend-production.up.railway.app/', cat:'app', kk:{n:'ҰБТ Дайындық Платформасы', d:'ҰБТ-ға дайындалуға арналған оқу платформасы.'}, ru:{n:'Платформа подготовки к ЕНТ', d:'Образовательная платформа для подготовки к ЕНТ.'} },
+  { url:'https://minaikhansaltanat-prog.github.io/kolledzh/', cat:'site', kk:{n:'Туризм және Менеджмент Колледжі', d:'Оқу орнының ресми ақпараттық сайты.'}, ru:{n:'Колледж туризма и менеджмента', d:'Официальный информационный сайт учебного заведения.'} },
+  { url:'https://minaikhansaltanat-prog.github.io/asyl-arman-site/', cat:'site', kk:{n:'Асыл Арман, Массаж Желісі', d:'Массаж қызметтерінің каталогы бар сайт.'}, ru:{n:'Асыл Арман, сеть массажа', d:'Сайт с каталогом услуг массажа.'} },
+  { url:'https://vizaro.net/', cat:'site', kk:{n:'VizaRoNet, Виза Орталығы', d:'Виза рәсімдеу орталығының қызмет сайты.'}, ru:{n:'VizaRoNet, визовый центр', d:'Сайт услуг центра оформления виз.'} },
+  { url:'https://minaikhansaltanat-prog.github.io/azyqcompany/', cat:'site', kk:{n:'Азық-Түлік Тасымал Компаниясы', d:'Логистика компаниясының корпоративтік сайты.'}, ru:{n:'Компания доставки продуктов', d:'Корпоративный сайт логистической компании.'} },
+  { url:'https://minaikhansaltanat-prog.github.io/sumka/', cat:'site', kk:{n:'SAMGA-NIITS, Сөмке Дистрибуциясы', d:'Көтерме сөмке дистрибуциясының каталог-сайты.'}, ru:{n:'SAMGA-NIITS, дистрибуция сумок', d:'Сайт-каталог оптовой дистрибуции сумок.'} },
+  { url:'https://kasipker-site.vercel.app/', cat:'app', kk:{n:'Kasipker, Кәсіпкерлер Платформасы', d:'Кәсіпкерлерге арналған қолдау платформасы.'}, ru:{n:'Kasipker, платформа предпринимателей', d:'Платформа поддержки предпринимателей.'} },
+  { url:'https://saea-alpha.vercel.app/kk', cat:'site', kk:{n:'CAEA, Орта Азия Кәсіпкерлер Қауымдастығы', d:'Қауымдастықтың ресми сайты.'}, ru:{n:'CAEA, Ассоциация предпринимателей ЦА', d:'Официальный сайт ассоциации.'} },
+  { url:'https://minaikhansaltanat-prog.github.io/zhamilyia-/#hero', cat:'app', kk:{n:'Жәмила Оразбай, Ментор Платформасы', d:'Жеке брендке арналған ментор-платформа.'}, ru:{n:'Жамиля Оразбай, платформа ментора', d:'Платформа для личного бренда ментора.'} },
+  { url:'https://minaikhansaltanat-prog.github.io/AlakolFish/#hero', cat:'site', kk:{n:'Alakol Fish, Балық Жеткізу Қызметі', d:'Балық жеткізу қызметінің сайты.'}, ru:{n:'Alakol Fish, доставка рыбы', d:'Сайт службы доставки рыбы.'} },
+  { url:'https://alash-one.vercel.app/ru', cat:'site', kk:{n:'Alash One', d:'Корпоративтік ұсыныс сайты.'}, ru:{n:'Alash One', d:'Корпоративный презентационный сайт.'} },
+  { url:'https://bayouteam-five.vercel.app/kk/login', cat:'app', kk:{n:'Bayou Team, кіру беті', d:'Команданың ішкі жүйесіне кіру беті.'}, ru:{n:'Bayou Team, страница входа', d:'Страница входа во внутреннюю систему команды.'} },
+  { url:'https://sicoinhotel.com/', cat:'site', kk:{n:'Sicoin Hotel', d:'Қонақүйдің брондау ақпараты бар сайты.'}, ru:{n:'Sicoin Hotel', d:'Сайт отеля с информацией для бронирования.'} },
+  { url:'https://surapid.kz/', cat:'site', kk:{n:'Surapid', d:'Қызмет көрсету компаниясының сайты.'}, ru:{n:'Surapid', d:'Сайт компании по оказанию услуг.'} },
+  { url:'https://gumyr.kz/', cat:'site', kk:{n:'Gumyr', d:'Брендтік ұсыныс сайты.'}, ru:{n:'Gumyr', d:'Презентационный сайт бренда.'} },
+  { url:'https://bileton.kz/', cat:'app', kk:{n:'Bileton', d:'Билет сату платформасы.'}, ru:{n:'Bileton', d:'Платформа продажи билетов.'} },
+  { url:'https://minaikhansaltanat-prog.github.io/sagat/#top', cat:'site', kk:{n:'Sagat', d:'Қызмет көрсету брендінің сайты.'}, ru:{n:'Sagat', d:'Сайт сервисного бренда.'} },
+  { url:'https://www.5myn.kz/', cat:'site', kk:{n:'5myn', d:'Жедел қызмет көрсету сайты.'}, ru:{n:'5myn', d:'Сайт сервиса быстрых услуг.'} },
+  { url:'https://minaikhansaltanat-prog.github.io/ai-mentor/', cat:'ai', kk:{n:'AI Mentor', d:'AI негізіндегі ментор-қосымша.'}, ru:{n:'AI Mentor', d:'AI-приложение в роли ментора.'} },
+  { url:'https://minaikhansaltanat-prog.github.io/masshtab-ai/', cat:'ai', kk:{n:'Masshtab AI', d:'Бизнесті масштабтауға арналған AI-құрал.'}, ru:{n:'Masshtab AI', d:'AI-инструмент для масштабирования бизнеса.'} },
+  { url:'https://minaikhansaltanat-prog.github.io/dizenfeksia/', cat:'site', kk:{n:'Dizenfeksia', d:'Дезинфекция қызметінің сайты.'}, ru:{n:'Dizenfeksia', d:'Сайт службы дезинфекции.'} },
+  { url:'https://minaikhansaltanat-prog.github.io/qulan/', cat:'site', kk:{n:'Qulan', d:'Брендтік қызмет сайты.'}, ru:{n:'Qulan', d:'Сайт сервисного бренда.'} },
+  { url:'https://minaikhansaltanat-prog.github.io/litera/', cat:'site', kk:{n:'Litera', d:'Білім беру бағыттағы сайт.'}, ru:{n:'Litera', d:'Сайт образовательного направления.'} },
+  { url:'https://minaikhansaltanat-prog.github.io/zhasaru/', cat:'site', kk:{n:'Zhasaru, Салон Сұлулық', d:'Сұлулық салонының қызмет сайты.'}, ru:{n:'Zhasaru, салон красоты', d:'Сайт услуг салона красоты.'} },
+  { url:'https://minaikhansaltanat-prog.github.io/bekzat/', cat:'site', kk:{n:'Bekzat', d:'Жеке бренд сайты.'}, ru:{n:'Bekzat', d:'Сайт личного бренда.'} },
+  { url:'https://minaikhansaltanat-prog.github.io/uldana/', cat:'site', kk:{n:'Uldana', d:'Жеке бренд сайты.'}, ru:{n:'Uldana', d:'Сайт личного бренда.'} },
+  { url:'https://minaikhansaltanat-prog.github.io/bayouhostel/', cat:'app', kk:{n:'Bayou Hostel', d:'Әкімшілік панелі бар хостел платформасы.'}, ru:{n:'Bayou Hostel', d:'Платформа хостела со встроенной админ-панелью.'} },
+  { url:'https://hostel-bayou.on-forge.com/request-account', cat:'app', kk:{n:'Bayou Hostel, әкімшілік панель', d:'Хостелдің әкімшілік панель беті.'}, ru:{n:'Bayou Hostel, админ-панель', d:'Страница админ-панели хостела.'} },
+  { url:'https://minaikhansaltanat-prog.github.io/socks/', cat:'site', kk:{n:'STEPKZ, Наскилер Дистрибуциясы', d:'Наски дистрибуциясының каталог-сайты.'}, ru:{n:'STEPKZ, дистрибуция носков', d:'Сайт-каталог дистрибуции носков.'} },
+  { url:'https://minaikhansaltanat-prog.github.io/china/', cat:'site', kk:{n:'Қытай Бизнес Тур', d:'Бизнес-тур ұйымдастыру қызметінің сайты.'}, ru:{n:'Китай Бизнес Тур', d:'Сайт услуги организации бизнес-туров.'} },
+  { url:'https://minaikhansaltanat-prog.github.io/alash/', cat:'site', kk:{n:'ҰБТ Сайты (Alash)', d:'ҰБТ-ға дайындық бағытындағы сайт.'}, ru:{n:'Сайт ЕНТ (Alash)', d:'Сайт направления подготовки к ЕНТ.'} },
+  { url:'https://minaikhansaltanat-prog.github.io/avtotlectric/', cat:'site', kk:{n:'Автоэлектрик', d:'Авто электрик қызметінің сайты.'}, ru:{n:'Автоэлектрик', d:'Сайт услуг автоэлектрика.'} },
+  { url:'https://minaikhansaltanat-prog.github.io/aq-bosaga/', cat:'site', kk:{n:'Ақ Босаға, Әйелдер Қауымдастығы', d:'Қоғамдық қауымдастықтың сайты.'}, ru:{n:'Ак Босага, Ассоциация женщин', d:'Сайт общественной ассоциации.'} },
+  { url:'https://minaikhansaltanat-prog.github.io/conder/', cat:'site', kk:{n:'Кондиционер Орнату Қызметі', d:'Тұрмыстық қызмет көрсету сайты.'}, ru:{n:'Установка кондиционеров', d:'Сайт бытовой сервисной услуги.'} },
+  { url:'https://minaikhansaltanat-prog.github.io/master/', cat:'site', kk:{n:'Мастер', d:'Жеке шебер қызметінің сайты.'}, ru:{n:'Мастер', d:'Сайт услуг частного мастера.'} },
+  { url:'https://minaikhansaltanat-prog.github.io/tauturan/', cat:'site', kk:{n:'Таутуран Демалыс Орны', d:'Демалыс орнының ұсыныс сайты.'}, ru:{n:'База отдыха Таутуран', d:'Презентационный сайт базы отдыха.'} },
+  { url:'https://minaikhansaltanat-prog.github.io/-/', cat:'site', kk:{n:'Ағаш Сатушы Компания', d:'Ағаш өнімдерін сату компаниясының сайты.'}, ru:{n:'Компания продажи леса', d:'Сайт компании по продаже лесоматериалов.'} },
+  { url:'https://minaikhansaltanat-prog.github.io/uu/', cat:'site', kk:{n:'Қытай Компаниясы', d:'Сауда компаниясының ұсыныс сайты.'}, ru:{n:'Китайская компания', d:'Презентационный сайт торговой компании.'} }
+];
+
+let lang = localStorage.getItem('bayou_lang') || 'kk';
+const META = {
+  kk:{ title:'BAYOU — сайт, қосымша және AI-автоматтандыру агенттігі', desc:'BAYOU агенттігі веб-сайт, SaaS-қосымша және AI-автоматтандыру жасайды. 35+ жоба, 1 күннен бастап дайын, қазақша және орысша қолдау.' },
+  ru:{ title:'BAYOU — агентство сайтов, приложений и AI-автоматизации', desc:'BAYOU создаёт веб-сайты, SaaS-приложения и AI-автоматизацию. 35+ проектов, готово от 1 дня, поддержка на казахском и русском.' }
+};
+
+function applyI18n(){
+  document.documentElement.lang = lang;
+  document.title = META[lang].title;
+  document.querySelector('meta[name="description"]').setAttribute('content', META[lang].desc);
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.getAttribute('data-i18n');
+    if(I18N[lang][key] !== undefined) el.textContent = I18N[lang][key];
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-placeholder');
+    if(I18N[lang][key] !== undefined) el.setAttribute('placeholder', I18N[lang][key]);
+  });
+  document.querySelectorAll('.lang-switch button').forEach(b=> b.classList.toggle('active', b.dataset.lang===lang));
+  renderServices(); renderProcess(); renderWhy(); renderPricing(); renderFaq(); renderPortfolio(currentFilter);
+}
+
+function setLang(l){ lang=l; localStorage.setItem('bayou_lang', l); applyI18n(); }
+document.getElementById('langSwitch').addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b) return; setLang(b.dataset.lang);
+});
+
+function renderServices(){
+  document.getElementById('servicesGrid').innerHTML = SERVICES.map(s=>`
+    <div class="svc-card">
+      <div class="svc-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="${s.icon}"/></svg></div>
+      <h3>${s[lang].h}</h3>
+      <p>${s[lang].d}</p>
+      <div class="svc-meta">
+        <span class="price">${typeof s.price==='string'?s.price:s.price[lang]}</span>
+        <span class="time">${s.time[lang]}</span>
+      </div>
+    </div>`).join('');
+}
+
+function renderProcess(){
+  document.getElementById('processList').innerHTML = PROCESS.map((p,i)=>`
+    <div class="p-step">
+      <div class="num">${String(i+1).padStart(2,'0')}</div>
+      <div><h3>${p[lang].h}</h3><p>${p[lang].d}</p><div class="dur">${p[lang].t}</div></div>
+    </div>`).join('');
+}
+
+function renderWhy(){
+  document.getElementById('whyGrid').innerHTML = WHY.map(w=>`
+    <div class="why-card"><h3>${w[lang].h}</h3><p>${w[lang].d}</p></div>`).join('');
+}
+
+function renderPricing(){
+  document.getElementById('pricingBody').innerHTML = PRICING.map(p=>`
+    <tr>
+      <td class="svc-name">${p[lang]}</td>
+      <td class="price">${typeof p.price==='string'?p.price:p.price[lang]}</td>
+      <td>${p.time[lang]}</td>
+    </tr>`).join('');
+}
+
+function renderFaq(){
+  document.getElementById('faqList').innerHTML = FAQ.map((f,i)=>`
+    <div class="faq-item" data-i="${i}">
+      <button class="faq-q" type="button">${f[lang].q}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+      <div class="faq-a-wrap"><div class="faq-a-inner"><div class="faq-a">${f[lang].a}</div></div></div>
+    </div>`).join('');
+  document.querySelectorAll('.faq-q').forEach(btn=>{
+    btn.addEventListener('click', ()=> btn.closest('.faq-item').classList.toggle('open'));
+  });
+}
+
+function slugify(url){
+  return url.replace(/^https?:\/\//,'').replace(/[^a-z0-9]+/gi,'-').replace(/^-+|-+$/g,'').toLowerCase().slice(0,60);
+}
+let currentFilter = 'all';
+function renderPortfolio(filter){
+  currentFilter = filter;
+  const items = filter==='all' ? PORTFOLIO : PORTFOLIO.filter(p=>p.cat===filter);
+  const tagClass = { site:'tag-site', app:'tag-app', ai:'tag-ai' };
+  const tagLabel = { site:I18N[lang]['pf.filter.site'], app:I18N[lang]['pf.filter.app'], ai:I18N[lang]['pf.filter.ai'] };
+  document.getElementById('portfolioGrid').innerHTML = items.map(item=>{
+    const slug = slugify(item.url);
+    return `
+    <a class="pf-card" href="${item.url}" target="_blank" rel="noopener">
+      <div class="pf-thumb">
+        <span class="tag ${tagClass[item.cat]}">${tagLabel[item.cat]}</span>
+        <div class="pf-ph pf-ph-${item.cat}"><span>${item[lang].n}</span></div>
+        <img class="pf-img" src="assets/portfolio/${slug}-desktop.jpg" alt="${item[lang].n}" loading="lazy" onerror="this.remove()">
+        <div class="pf-phone"><img src="assets/portfolio/${slug}-mobile.jpg" alt="" loading="lazy" onerror="this.parentElement.remove()"></div>
+      </div>
+      <div class="pf-body">
+        <h3>${item[lang].n}</h3>
+        <p>${item[lang].d}</p>
+        <span class="pf-link">${I18N[lang]['pf.visit']}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17 17 7M9 7h8v8"/></svg>
+        </span>
+      </div>
+    </a>`;
+  }).join('');
+}
+document.getElementById('filterRow').addEventListener('click', e=>{
+  const b = e.target.closest('.filter-chip'); if(!b) return;
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  b.classList.add('active');
+  renderPortfolio(b.dataset.filter);
+});
+
+/* mobile drawer */
+const burger = document.getElementById('burger');
+const drawer = document.getElementById('drawer');
+burger.addEventListener('click', ()=>{
+  burger.classList.toggle('open');
+  drawer.classList.toggle('open');
+});
+drawer.addEventListener('click', e=>{
+  if(e.target===drawer || e.target.tagName==='A'){ burger.classList.remove('open'); drawer.classList.remove('open'); }
+});
+
+/* topbar scroll shadow */
+const topbar = document.getElementById('topbar');
+window.addEventListener('scroll', ()=> topbar.classList.toggle('scrolled', window.scrollY>10), { passive:true });
+
+/* contact form -> whatsapp */
+document.getElementById('briefForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  const name = document.getElementById('f-name').value.trim();
+  const service = document.getElementById('f-service').value;
+  const budget = document.getElementById('f-budget').value.trim();
+  const desc = document.getElementById('f-desc').value.trim();
+  const lines = lang==='kk'
+    ? [`Сәлеметсіз бе! Атым — ${name}.`, `Қызмет түрі: ${service}`, budget?`Бюджет: ${budget}`:'', desc?`Сипаттама: ${desc}`:'']
+    : [`Здравствуйте! Меня зовут ${name}.`, `Тип услуги: ${service}`, budget?`Бюджет: ${budget}`:'', desc?`Описание: ${desc}`:''];
+  const text = encodeURIComponent(lines.filter(Boolean).join('\n'));
+  window.open(`https://wa.me/77471673817?text=${text}`, '_blank');
+});
+
+/* AI demo widget */
+const aiPanel = document.getElementById('aiPanel');
+const aiToggle = document.getElementById('aiToggle');
+const aiBody = document.getElementById('aiBody');
+const aiInput = document.getElementById('aiInput');
+let aiOpened = false;
+function addAiMsg(text, who){
+  const div = document.createElement('div');
+  div.className = 'ai-msg ' + who;
+  div.textContent = text;
+  aiBody.appendChild(div);
+  aiBody.scrollTop = aiBody.scrollHeight;
+}
+aiToggle.addEventListener('click', ()=>{
+  aiPanel.classList.toggle('open');
+  if(!aiOpened && aiPanel.classList.contains('open')){ addAiMsg(I18N[lang]['ai.greet'],'bot'); aiOpened=true; }
+});
+function aiReply(msg){
+  const m = msg.toLowerCase();
+  if(/баг|цен|price|ц[ае]н/.test(m)) return I18N[lang]['ai.price'];
+  if(/мерз|срок|қашан|когда/.test(m)) return I18N[lang]['ai.time'];
+  if(/қызмет|услуг|service/.test(m)) return I18N[lang]['ai.service'];
+  return I18N[lang]['ai.fallback'];
+}
+function sendAi(){
+  const v = aiInput.value.trim(); if(!v) return;
+  addAiMsg(v,'user'); aiInput.value='';
+  setTimeout(()=> addAiMsg(aiReply(v),'bot'), 350);
+}
+document.getElementById('aiSend').addEventListener('click', sendAi);
+aiInput.addEventListener('keydown', e=>{ if(e.key==='Enter') sendAi(); });
+
+applyI18n();
+</script>
+</body>
+</html>

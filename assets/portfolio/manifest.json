@@ -1,0 +1,235 @@
+[
+  {
+    "url": "https://ziyatfrontend-production.up.railway.app/",
+    "slug": "ziyatfrontend-production-up-railway-app",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://minaikhansaltanat-prog.github.io/asyl-arman-site/",
+    "slug": "minaikhansaltanat-prog-github-io-asyl-arman-site",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://minaikhansaltanat-prog.github.io/kolledzh/",
+    "slug": "minaikhansaltanat-prog-github-io-kolledzh",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://vizaro.net/",
+    "slug": "vizaro-net",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://minaikhansaltanat-prog.github.io/azyqcompany/",
+    "slug": "minaikhansaltanat-prog-github-io-azyqcompany",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://minaikhansaltanat-prog.github.io/sumka/",
+    "slug": "minaikhansaltanat-prog-github-io-sumka",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://saea-alpha.vercel.app/kk",
+    "slug": "saea-alpha-vercel-app-kk",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://kasipker-site.vercel.app/",
+    "slug": "kasipker-site-vercel-app",
+    "desktop": false,
+    "mobile": false,
+    "error": "desktop:Navigation timeout of 15000 ms exceeded mobile:watchdog-timeout:screenshot"
+  },
+  {
+    "url": "https://minaikhansaltanat-prog.github.io/zhamilyia-/#hero",
+    "slug": "minaikhansaltanat-prog-github-io-zhamilyia-hero",
+    "desktop": false,
+    "mobile": false,
+    "error": "desktop:Navigation timeout of 15000 ms exceeded mobile:Navigation timeout of 15000 ms exceeded"
+  },
+  {
+    "url": "https://minaikhansaltanat-prog.github.io/AlakolFish/#hero",
+    "slug": "minaikhansaltanat-prog-github-io-alakolfish-hero",
+    "desktop": false,
+    "mobile": false,
+    "error": "desktop:Navigation timeout of 15000 ms exceeded mobile:Navigation timeout of 15000 ms exceeded"
+  },
+  {
+    "url": "https://surapid.kz/",
+    "slug": "surapid-kz",
+    "desktop": false,
+    "mobile": false,
+    "error": "desktop:net::ERR_NAME_NOT_RESOLVED at https://surapid.kz/ mobile:net::ERR_NAME_NOT_RESOLVED at https://surapid.kz/"
+  },
+  {
+    "url": "https://bayouteam-five.vercel.app/kk/login",
+    "slug": "bayouteam-five-vercel-app-kk-login",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://sicoinhotel.com/",
+    "slug": "sicoinhotel-com",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://gumyr.kz/",
+    "slug": "gumyr-kz",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://alash-one.vercel.app/ru",
+    "slug": "alash-one-vercel-app-ru",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://bileton.kz/",
+    "slug": "bileton-kz",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://www.5myn.kz/",
+    "slug": "www-5myn-kz",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://minaikhansaltanat-prog.github.io/sagat/#top",
+    "slug": "minaikhansaltanat-prog-github-io-sagat-top",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://minaikhansaltanat-prog.github.io/ai-mentor/",
+    "slug": "minaikhansaltanat-prog-github-io-ai-mentor",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://minaikhansaltanat-prog.github.io/masshtab-ai/",
+    "slug": "minaikhansaltanat-prog-github-io-masshtab-ai",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://minaikhansaltanat-prog.github.io/litera/",
+    "slug": "minaikhansaltanat-prog-github-io-litera",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://minaikhansaltanat-prog.github.io/dizenfeksia/",
+    "slug": "minaikhansaltanat-prog-github-io-dizenfeksia",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://minaikhansaltanat-prog.github.io/qulan/",
+    "slug": "minaikhansaltanat-prog-github-io-qulan",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://minaikhansaltanat-prog.github.io/bekzat/",
+    "slug": "minaikhansaltanat-prog-github-io-bekzat",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://minaikhansaltanat-prog.github.io/uldana/",
+    "slug": "minaikhansaltanat-prog-github-io-uldana",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://hostel-bayou.on-forge.com/request-account",
+    "slug": "hostel-bayou-on-forge-com-request-account",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://minaikhansaltanat-prog.github.io/bayouhostel/",
+    "slug": "minaikhansaltanat-prog-github-io-bayouhostel",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://minaikhansaltanat-prog.github.io/alash/",
+    "slug": "minaikhansaltanat-prog-github-io-alash",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://minaikhansaltanat-prog.github.io/zhasaru/",
+    "slug": "minaikhansaltanat-prog-github-io-zhasaru",
+    "desktop": false,
+    "mobile": true,
+    "error": "desktop:Navigation timeout of 15000 ms exceeded "
+  },
+  {
+    "url": "https://minaikhansaltanat-prog.github.io/china/",
+    "slug": "minaikhansaltanat-prog-github-io-china",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://minaikhansaltanat-prog.github.io/socks/",
+    "slug": "minaikhansaltanat-prog-github-io-socks",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://minaikhansaltanat-prog.github.io/avtotlectric/",
+    "slug": "minaikhansaltanat-prog-github-io-avtotlectric",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://minaikhansaltanat-prog.github.io/aq-bosaga/",
+    "slug": "minaikhansaltanat-prog-github-io-aq-bosaga",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://minaikhansaltanat-prog.github.io/conder/",
+    "slug": "minaikhansaltanat-prog-github-io-conder",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://minaikhansaltanat-prog.github.io/tauturan/",
+    "slug": "minaikhansaltanat-prog-github-io-tauturan",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://minaikhansaltanat-prog.github.io/master/",
+    "slug": "minaikhansaltanat-prog-github-io-master",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://minaikhansaltanat-prog.github.io/uu/",
+    "slug": "minaikhansaltanat-prog-github-io-uu",
+    "desktop": true,
+    "mobile": true
+  },
+  {
+    "url": "https://minaikhansaltanat-prog.github.io/-/",
+    "slug": "minaikhansaltanat-prog-github-io",
+    "desktop": true,
+    "mobile": true
+  }
+]

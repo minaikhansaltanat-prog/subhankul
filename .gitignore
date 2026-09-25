@@ -1,0 +1,16 @@
+node_modules/
+temporary screenshots/
+.claude/
+
+# unrelated Claude Code skill-plugin files accidentally present in this folder
+SKILL.md
+SKILL s.md
+core.py
+core.cpython-314.pyc
+design_system.py
+design_system.cpython-314.pyc
+search.py
+search.cpython-314.pyc
+plugin.json
+data/
+README.md
