@@ -1081,7 +1081,7 @@ async function sendAi(){
     } else {
       addAiMsg(data.reply,'bot');
       aiHistory.push({ role:'user', content:v }, { role:'assistant', content:data.reply });
-      aiHistory = aiHistory.slice(-10);
+      aiHistory = aiHistory.slice(-16);
     }
   }catch(err){
     typingEl.remove();
